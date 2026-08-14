@@ -1,0 +1,41 @@
+{
+  "rsu_id": "RSU_02",
+  "timestamp": "2026-08-13T05:07:09.856977+00:00",
+  "vehicle_count": 0,
+  "avg_speed_kmh": 0.0,
+  "traffic_density": 0.0,
+  "latitude": 52.5205,
+  "longitude": 13.407,
+  "camera_count": 3,
+  "cameras_active": [
+    "CAM_03",
+    "CAM_04",
+    "CAM_05"
+  ],
+  "network_stats": {
+    "CAM_03": {
+      "packets_tx_expected": 55,
+      "packets_rx": 44,
+      "packets_lost": 11,
+      "pdr_pct": 80.0,
+      "avg_latency_ms": 0.591,
+      "throughput_kbps": 0.137
+    },
+    "CAM_04": {
+      "packets_tx_expected": 55,
+      "packets_rx": 44,
+      "packets_lost": 11,
+      "pdr_pct": 80.0,
+      "avg_latency_ms": 0.387,
+      "throughput_kbps": 0.136
+    },
+    "CAM_05": {
+      "packets_tx_expected": 55,
+      "packets_rx": 44,
+      "packets_lost": 11,
+      "pdr_pct": 80.0,
+      "avg_latency_ms": 0.842,
+      "throughput_kbps": 0.135
+    }
+  }
+}

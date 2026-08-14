@@ -1,0 +1,4 @@
+nRSU,rsu_idx,rsu_type,packets_tx,packets_rx,pdr_pct,avg_delay_ms,throughput_kbps
+3,1,real,560,560,100,13,0.892272
+3,2,real,560,560,100,13,1.13706
+3,3,real,560,560,100,13,0.896363

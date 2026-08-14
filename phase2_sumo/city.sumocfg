@@ -1,0 +1,14 @@
+<configuration>
+  <input>
+    <net-file value="city.net.xml"/>
+    <route-files value="routes_medium.rou.xml"/>
+  </input>
+  <time>
+    <begin value="0"/>
+    <end value="3600"/>
+    <step-length value="0.05"/>
+  </time>
+  <traci_server>
+    <remote-port value="8813"/>
+  </traci_server>
+</configuration>

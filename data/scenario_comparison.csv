@@ -1,0 +1,4 @@
+scenario,total_vehicles,avg_speed_kmh,avg_wait_time_s
+light,19,37.52,0.15
+medium,44,36.58,0.2
+heavy,137,29.59,1.46

@@ -1,0 +1,3 @@
+link,layer_src,layer_dst,protocol,packets_tx,packets_rx,pdr_pct,avg_delay_ms,throughput_kbps
+WiFi_EdgeToFog,Edge,Fog,UDP,56,0,0,0,0
+LTE_FogToCloud,Fog,Cloud,UDP,56,0,0,0,0

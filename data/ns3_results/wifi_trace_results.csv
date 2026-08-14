@@ -1,0 +1,4 @@
+cluster,subnet,packets_tx,packets_rx,pdr_pct,avg_delay_ms,throughput_kbps
+RSU_01,10.1.x,496,496,100,0.318548,1.02844
+RSU_02,10.2.x,744,744,100,0.260753,1.54184
+RSU_03,10.3.x,498,68,13.6546,1.30882,0.192227

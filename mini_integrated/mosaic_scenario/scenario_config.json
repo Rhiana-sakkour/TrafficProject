@@ -1,0 +1,17 @@
+{
+    "simulation": {
+        "id": "mini_integrated",
+        "duration": "3600s",
+        "randomSeed": 268,
+        "projection": {
+            "centerCoordinates": {
+                "latitude": 52.5205,
+                "longitude": 13.4070
+            },
+            "cartesianOffset": { "x": -200.0, "y": -200.0 }
+        }
+    },
+    "federates": {
+        "sumo": { "deploy": true, "start": true }
+    }
+}

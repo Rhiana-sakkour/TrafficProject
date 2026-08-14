@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_90f9ae912de3e9d88c83386bb527a9d3 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+        
+    <script src="https://cdn.jsdelivr.net/gh/python-visualization/folium@main/folium/templates/leaflet_heat.min.js"></script>
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_90f9ae912de3e9d88c83386bb527a9d3" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_90f9ae912de3e9d88c83386bb527a9d3 = L.map(
+                "map_90f9ae912de3e9d88c83386bb527a9d3",
+                {
+                    center: [52.5203, 13.4043],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 15,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_fc472cc40e39315913955796cd7042e9 = L.tileLayer(
+                "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+                {"attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors \u0026copy; \u003ca href=\"https://carto.com/attributions\"\u003eCARTO\u003c/a\u003e", "detectRetina": false, "maxNativeZoom": 20, "maxZoom": 20, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abcd", "tms": false}
+            );
+        
+    
+            tile_layer_fc472cc40e39315913955796cd7042e9.addTo(map_90f9ae912de3e9d88c83386bb527a9d3);
+        
+    
+            var circle_marker_c3778d3051af075f8882579be0a6059c = L.circleMarker(
+                [52.521, 13.402],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.85, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 14, "stroke": true, "weight": 1}
+            ).addTo(map_90f9ae912de3e9d88c83386bb527a9d3);
+        
+    
+        var popup_267c8eadd526906dfd8266db87d85b75 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_38823cc69e0fda27c351f97b6d47b9f5 = $(`<div id="html_38823cc69e0fda27c351f97b6d47b9f5" style="width: 100.0%; height: 100.0%;">         <div style="font-family:monospace; font-size:13px; min-width:200px">             <b>RSU_01</b><br>             ─────────────────<br>             🚗 عدد المركبات : <b>0</b><br>             ⚡ متوسط السرعة : <b>0.0 km/h</b><br>             📊 الكثافة      : <b>36.09 veh/km</b><br>             📷 كاميرات      : CAM_01, CAM_02<br>             🕒 2026-08-10 18:09:51         </div>         </div>`)[0];
+                popup_267c8eadd526906dfd8266db87d85b75.setContent(html_38823cc69e0fda27c351f97b6d47b9f5);
+            
+        
+
+        circle_marker_c3778d3051af075f8882579be0a6059c.bindPopup(popup_267c8eadd526906dfd8266db87d85b75)
+        ;
+
+        
+    
+    
+            circle_marker_c3778d3051af075f8882579be0a6059c.bindTooltip(
+                `<div>
+                     RSU_01: 36.1 veh/km
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_657c585cc204e6bfa4bd924b8cb64ba8 = L.circleMarker(
+                [52.5205, 13.407],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.85, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 14, "stroke": true, "weight": 1}
+            ).addTo(map_90f9ae912de3e9d88c83386bb527a9d3);
+        
+    
+        var popup_1b963e625c53f692020cb564038d6692 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_e058e31b229b8f95629267ef9ce736f8 = $(`<div id="html_e058e31b229b8f95629267ef9ce736f8" style="width: 100.0%; height: 100.0%;">         <div style="font-family:monospace; font-size:13px; min-width:200px">             <b>RSU_02</b><br>             ─────────────────<br>             🚗 عدد المركبات : <b>0</b><br>             ⚡ متوسط السرعة : <b>0.0 km/h</b><br>             📊 الكثافة      : <b>0.00 veh/km</b><br>             📷 كاميرات      : CAM_03, CAM_04, CAM_05<br>             🕒 2026-08-10 18:09:51         </div>         </div>`)[0];
+                popup_1b963e625c53f692020cb564038d6692.setContent(html_e058e31b229b8f95629267ef9ce736f8);
+            
+        
+
+        circle_marker_657c585cc204e6bfa4bd924b8cb64ba8.bindPopup(popup_1b963e625c53f692020cb564038d6692)
+        ;
+
+        
+    
+    
+            circle_marker_657c585cc204e6bfa4bd924b8cb64ba8.bindTooltip(
+                `<div>
+                     RSU_02: 0.0 veh/km
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var circle_marker_ad35480e0b0f3767c3f44a61a617c66b = L.circleMarker(
+                [52.5195, 13.404],
+                {"bubblingMouseEvents": true, "color": "white", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.85, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 14, "stroke": true, "weight": 1}
+            ).addTo(map_90f9ae912de3e9d88c83386bb527a9d3);
+        
+    
+        var popup_45e9604248ecbeeed9fe1a93811ce745 = L.popup({"maxWidth": 250});
+
+        
+            
+                var html_c22df8bd7d6fec91c9025601200fbf89 = $(`<div id="html_c22df8bd7d6fec91c9025601200fbf89" style="width: 100.0%; height: 100.0%;">         <div style="font-family:monospace; font-size:13px; min-width:200px">             <b>RSU_03</b><br>             ─────────────────<br>             🚗 عدد المركبات : <b>2</b><br>             ⚡ متوسط السرعة : <b>0.0 km/h</b><br>             📊 الكثافة      : <b>18.04 veh/km</b><br>             📷 كاميرات      : CAM_07, CAM_06<br>             🕒 2026-08-10 18:09:46         </div>         </div>`)[0];
+                popup_45e9604248ecbeeed9fe1a93811ce745.setContent(html_c22df8bd7d6fec91c9025601200fbf89);
+            
+        
+
+        circle_marker_ad35480e0b0f3767c3f44a61a617c66b.bindPopup(popup_45e9604248ecbeeed9fe1a93811ce745)
+        ;
+
+        
+    
+    
+            circle_marker_ad35480e0b0f3767c3f44a61a617c66b.bindTooltip(
+                `<div>
+                     RSU_03: 18.0 veh/km
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var heat_map_58d4d38204dd93844f5062923dd4511d = L.heatLayer(
+                [[52.521, 13.402, 36.085], [52.5205, 13.407, 0.0], [52.5195, 13.404, 18.04]],
+                {"blur": 50, "gradient": {"0.2": "blue", "0.5": "lime", "0.8": "orange", "1.0": "red"}, "maxZoom": 17, "minOpacity": 0.3, "radius": 80}
+            );
+        
+    
+            heat_map_58d4d38204dd93844f5062923dd4511d.addTo(map_90f9ae912de3e9d88c83386bb527a9d3);
+        
+</script>
+</html>
