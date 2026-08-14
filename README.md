@@ -2,7 +2,7 @@
 4th_year_project
 # تصميم ومحاكاة شبكة لتقدير كثافة حركة المرور في المدن الذكية باستخدام كاميرات متعددة والتجميع الموزع
 
-Design and implementation of a network for estimating traffic density in smart cities using multiple cameras and distributed aggregation.
+# Design and implementation of a network for estimating traffic density in smart cities using multiple cameras and distributed aggregation.
 
 ## نظرة عامة
 يُنفّذ هذا المشروع شبكة موزعة على مستوى المدينة لتقدير كثافة المرور في الوقت الفعلي، باستخدام
@@ -53,44 +53,44 @@ Design and implementation of a network for estimating traffic density in smart c
 - Java 17 (JDK)
 -  تثبيت وإعداد وسيط MQTT (Mosquitto)
 
-##مراحل التنفيذ 
-Terminal 1
+## مراحل التنفيذ 
+### Terminal 1
 mosquitto -c C:\mosquitto\mosquitto.conf -v
 
-T2:
+### T2:
 start "" "C:\CARLA_0.9.13\WindowsNoEditor\CarlaUE4.exe" -quality-level=Low -windowed -ResX=800 -ResY=600 -benchmark -fps=20
 OR
 start "" "C:\CARLA_0.9.13\WindowsNoEditor\CarlaUE4.exe" -RenderOffScreen -quality-level=Low -windowed -ResX=800 -ResY=600 -benchmark -fps=20
 
-T3:
+### T3:
 cd C:\TrafficProject\phase1_carla
 python run_phase1.py
 
 
-T4:
+### T4:
 cd C:\TrafficProject\phase3_mosaic
 python rsu_aggregation.py
 
 
-T_new:     to show json Files
+### T_new:     to show json Files
 type C:\TrafficProject\data\rsu_json\RSU_01.json
 type C:\TrafficProject\data\rsu_json\RSU_02.json
 type C:\TrafficProject\data\rsu_json\RSU_03.json
 
-T_exceptional:
+### T_exceptional:
 cd C:\TrafficProject\phase3_mosaic
 python adaptive_signal.py
 
-T5:
+### T5:
 cd C:\TrafficProject\phase6_server
 python central_server.py
 
 
-T_new:     to show dynamic heatmap
+### T_new:     to show dynamic heatmap
 start C:\TrafficProject\data\heatmaps\heatmap_latest.html
 
 
-T6:        to open ns-3 and monitoring
+### T6:        to open ns-3 and monitoring
 wsl -d Ubuntu-20.04
 
 cd ~/ns-allinone-3.35/ns-3.35
@@ -98,7 +98,7 @@ cd ~/ns-allinone-3.35/ns-3.35
 
 ./waf --run "traffic_lte_sim --nRSU=3" 2>&1 | tee ~/ns3_traffic/lte_3rsu.log
 
-T7_Scalability:
+### T7_Scalability:
 for n in 3 6 12 15 22 25 30 35; do
     echo "=== nRSU=$n ==="
     ./waf --run "traffic_lte_trace \
