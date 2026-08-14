@@ -1,6 +1,8 @@
 # TrafficProject
 4th_year_project
-# شبكة تقدير كثافة المرور باستخدام كاميرات موزعة وتجميع عبر وحدات RSU
+# تصميم ومحاكاة شبكة لتقدير كثافة حركة المرور في المدن الذكية باستخدام كاميرات متعددة والتجميع الموزع
+
+Design and implementation of a network for estimating traffic density in smart cities using multiple cameras and distributed aggregation.
 
 ## نظرة عامة
 يُنفّذ هذا المشروع شبكة موزعة على مستوى المدينة لتقدير كثافة المرور في الوقت الفعلي، باستخدام
@@ -11,9 +13,6 @@
 
 يُحاكى النظام باستخدام CARLA (محاكاة الكاميرات والمركبات)، SUMO (محاكاة حركة المرور)، وNS-3
 (محاكاة الشبكة عبر WiFi وLTE)، ويدمج معالجة الصور في الوقت الفعلي مع مراقبة أداء طبقة الشبكة.
-
-العنوان الرسمي: تصميم وتنفيذ شبكة لتقدير كثافة المرور في المدن الذكية باستخدام كاميرات
-متعددة وتجميع موزع.
 
 ## هيكلية النظام
 
@@ -50,6 +49,61 @@
 ## المتطلبات الأساسية (Prerequisites)
 - Windows — لتشغيل محاكاة CARLA ومعالجة الصور من جهة الكاميرا (المرحلة 1)
 - Linux (Ubuntu 20.04 عبر WSL2) — لتشغيل محاكاة الشبكة NS-3 (المرحلتان 4 و5)
-- Python 3.8.10 مع pip
+- Python 3.8.10 
 - Java 17 (JDK)
 -  تثبيت وإعداد وسيط MQTT (Mosquitto)
+
+##مراحل التنفيذ 
+Terminal 1
+mosquitto -c C:\mosquitto\mosquitto.conf -v
+
+T2:
+start "" "C:\CARLA_0.9.13\WindowsNoEditor\CarlaUE4.exe" -quality-level=Low -windowed -ResX=800 -ResY=600 -benchmark -fps=20
+OR
+start "" "C:\CARLA_0.9.13\WindowsNoEditor\CarlaUE4.exe" -RenderOffScreen -quality-level=Low -windowed -ResX=800 -ResY=600 -benchmark -fps=20
+
+T3:
+cd C:\TrafficProject\phase1_carla
+python run_phase1.py
+
+
+T4:
+cd C:\TrafficProject\phase3_mosaic
+python rsu_aggregation.py
+
+
+T_new:     to show json Files
+type C:\TrafficProject\data\rsu_json\RSU_01.json
+type C:\TrafficProject\data\rsu_json\RSU_02.json
+type C:\TrafficProject\data\rsu_json\RSU_03.json
+
+T_exceptional:
+cd C:\TrafficProject\phase3_mosaic
+python adaptive_signal.py
+
+T5:
+cd C:\TrafficProject\phase6_server
+python central_server.py
+
+
+T_new:     to show dynamic heatmap
+start C:\TrafficProject\data\heatmaps\heatmap_latest.html
+
+
+T6:        to open ns-3 and monitoring
+wsl -d Ubuntu-20.04
+
+cd ~/ns-allinone-3.35/ns-3.35
+./waf --run "traffic_wifi_sim" 2>&1 | tee ~/ns3_traffic/wifi_output.log
+
+./waf --run "traffic_lte_sim --nRSU=3" 2>&1 | tee ~/ns3_traffic/lte_3rsu.log
+
+T7_Scalability:
+for n in 3 6 12 15 22 25 30 35; do
+    echo "=== nRSU=$n ==="
+    ./waf --run "traffic_lte_trace \
+        --trace=/mnt/c/TrafficProject/data/ns3_results/real_rsu_trace.csv \
+        --nRSU=$n" \
+        2>&1 | tee ~/ns3_traffic/lte_trace_${n}rsu.log
+    echo "Done: nRSU=$n"
+done
