@@ -1,6 +1,5 @@
 """
 rsu3_fog.py — طبقة الضباب (Fog Layer)
-========================================
 الأدوات: Python 3.8 + paho-mqtt
 الوظيفة: UDP:7001 ← CAM_06 → Edge Aggregation → MQTT:traffic/RSU_03_MINI
 البروتوكول: MQTT over TCP/LTE (رابط RSU → Server)

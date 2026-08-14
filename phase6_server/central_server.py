@@ -1,8 +1,4 @@
 """
-central_server.py
-=================
-المرحلة الرابعة: السيرفر المركزي
-
 المهام:
   1. الاشتراك في جميع مواضيع MQTT (traffic/#)
   2. استقبال JSON من 3 وحدات RSU
@@ -30,9 +26,7 @@ matplotlib.use('Agg')   # بدون GUI — يمنع فتح نوافذ غير ض�
 import matplotlib.pyplot as plt
 import numpy as np
 
-# ─────────────────────────────────────────────────────────────────────────────
 # إعداد نظام التسجيل
-# ─────────────────────────────────────────────────────────────────────────────
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s [%(levelname)s] %(message)s',
@@ -40,9 +34,7 @@ logging.basicConfig(
 )
 log = logging.getLogger(__name__)
 
-# ─────────────────────────────────────────────────────────────────────────────
 # ثوابت
-# ─────────────────────────────────────────────────────────────────────────────
 MQTT_BROKER       = "localhost"
 MQTT_PORT         = 1883
 MQTT_TOPIC        = "traffic/#"      # # يعني جميع المواضيع الفرعية
@@ -55,16 +47,12 @@ MAP_ZOOM          = 15
 
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-# ─────────────────────────────────────────────────────────────────────────────
 # حالة الشبكة — يتجدد عند كل رسالة واردة
 # المفتاح: rsu_id | القيمة: آخر payload مستلم
-# ─────────────────────────────────────────────────────────────────────────────
 network_state: dict = {}
 
 
-# ─────────────────────────────────────────────────────────────────────────────
 # توليد الخريطة الحرارية الجغرافية (Folium — HTML تفاعلي)
-# ─────────────────────────────────────────────────────────────────────────────
 def generate_folium_heatmap(state: dict, timestamp: str) -> str:
     """
     ينشئ خريطة HTML تفاعلية تُظهر:
@@ -105,11 +93,11 @@ def generate_folium_heatmap(state: dict, timestamp: str) -> str:
         <div style="font-family:monospace; font-size:13px; min-width:200px">
             <b>{rsu_id}</b><br>
             ─────────────────<br>
-            🚗 عدد المركبات : <b>{count}</b><br>
-            ⚡ متوسط السرعة : <b>{speed:.1f} km/h</b><br>
-            📊 الكثافة      : <b>{density:.2f} veh/km</b><br>
-            📷 كاميرات      : {', '.join(cams)}<br>
-            🕒 {data.get('timestamp','N/A')[:19].replace('T',' ')}
+             عدد المركبات : <b>{count}</b><br>
+             متوسط السرعة : <b>{speed:.1f} km/h</b><br>
+             الكثافة      : <b>{density:.2f} veh/km</b><br>
+             كاميرات      : {', '.join(cams)}<br>
+             {data.get('timestamp','N/A')[:19].replace('T',' ')}
         </div>
         """
         folium.CircleMarker(
@@ -146,9 +134,7 @@ def generate_folium_heatmap(state: dict, timestamp: str) -> str:
     return latest_path
 
 
-# ─────────────────────────────────────────────────────────────────────────────
 # توليد الخريطة الحرارية الإحصائية (Seaborn — PNG)
-# ─────────────────────────────────────────────────────────────────────────────
 def generate_seaborn_heatmap(state: dict, timestamp: str) -> str:
     """
     ينشئ صورة PNG تُقارن 3 مقاييس (عدد، سرعة، كثافة) عبر 3 RSUs.
@@ -185,7 +171,7 @@ def generate_seaborn_heatmap(state: dict, timestamp: str) -> str:
     )
     fig.patch.set_facecolor('#1a1a2e')
 
-    # ── الخريطة الحرارية المُطبَّعة (يسار) ──────────────────────────
+    #  الخريطة الحرارية المُطبَّعة (يسار) 
     ax1 = axes[0]
     ax1.set_facecolor('#1a1a2e')
 
@@ -208,7 +194,7 @@ def generate_seaborn_heatmap(state: dict, timestamp: str) -> str:
     ax1.xaxis.label.set_color('white')
     ax1.yaxis.label.set_color('white')
 
-    # ── جدول القيم الفعلية (يمين) ────────────────────────────────────
+    #  جدول القيم الفعلية (يمين) 
     ax2 = axes[1]
     ax2.set_facecolor('#1a1a2e')
     ax2.axis('off')
@@ -256,9 +242,7 @@ def generate_seaborn_heatmap(state: dict, timestamp: str) -> str:
     return latest_path
 
 
-# ─────────────────────────────────────────────────────────────────────────────
 # توليد كلا الخريطتين معاً
-# ─────────────────────────────────────────────────────────────────────────────
 def generate_all_heatmaps(state: dict) -> None:
     """يُولِّد الخريطتين ويُسجِّل مساريهما."""
     if not state:
@@ -269,13 +253,11 @@ def generate_all_heatmaps(state: dict) -> None:
     html_path = generate_folium_heatmap(state, timestamp)
     png_path  = generate_seaborn_heatmap(state, timestamp)
 
-    log.info(f"  📍 HTML → {html_path}")
-    log.info(f"  📊 PNG  → {png_path}")
+    log.info(f"   HTML → {html_path}")
+    log.info(f"   PNG  → {png_path}")
 
 
-# ─────────────────────────────────────────────────────────────────────────────
 # Callbacks للـ MQTT
-# ─────────────────────────────────────────────────────────────────────────────
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
         log.info(f"[MQTT] متصل بـ {MQTT_BROKER}:{MQTT_PORT} ✓")
@@ -314,9 +296,7 @@ def on_message(client, userdata, msg):
         log.error(f"[MQTT] خطأ في معالجة الرسالة: {e}")
 
 
-# ─────────────────────────────────────────────────────────────────────────────
 # نقطة الدخول
-# ─────────────────────────────────────────────────────────────────────────────
 def run():
     log.info("=" * 60)
     log.info("Central Server — بدء التشغيل")

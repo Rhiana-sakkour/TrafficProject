@@ -1,6 +1,4 @@
 """
-rsu_aggregation.py — Memory-Based Network Streaming Edition
-==========================================================
 Architecture:
     Camera ──UDP──→ [UDP Listener Thread per RSU] ──→ In-Memory Buffer
     [Aggregation Loop] reads buffer every 5s ──MQTT──→ Central Server
@@ -28,9 +26,7 @@ import paho.mqtt.client as mqtt
 
 from camera_config import RSU_CLUSTERS, RSU_UDP_PORTS, RSU_COORDINATES
 
-# ─────────────────────────────────────────────────────────────────────────────
 # Logging
-# ─────────────────────────────────────────────────────────────────────────────
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s [%(levelname)s] %(message)s',
@@ -38,9 +34,7 @@ logging.basicConfig(
 )
 log = logging.getLogger(__name__)
 
-# ─────────────────────────────────────────────────────────────────────────────
 # ثوابت
-# ─────────────────────────────────────────────────────────────────────────────
 MQTT_BROKER        = "localhost"
 MQTT_PORT          = 1883
 MQTT_QOS           = 1
@@ -52,7 +46,7 @@ STALE_THRESHOLD    = 30.0
 SAVE_RSU_BACKUP    = True
 RSU_JSON_DIR       = r"C:\TrafficProject\data\rsu_json"
 
-# ── RSU Trace Logger (لـ NS-3 LTE Trace-Driven) ──────────────────
+#  RSU Trace Logger (لـ NS-3 LTE Trace-Driven) 
 RSU_TRACE_FILE    = r"C:\TrafficProject\data\ns3_results\real_rsu_trace.csv"
 _rsu_trace_lock   = threading.Lock()
 _rsu_trace_init   = False
@@ -86,9 +80,7 @@ def log_rsu_trace(rsu_id: str, payload_bytes: int):
 
     threading.Thread(target=_write, daemon=True).start()
 
-# ─────────────────────────────────────────────────────────────────────────────
 # إحصاءات الشبكة الحقيقية — تُحدَّث عند كل حزمة واردة
-# ─────────────────────────────────────────────────────────────────────────────
 # _net_stats[cam_id] = {
 #   "expected_seq" : الرقم التسلسلي المتوقع التالي
 #   "rx_count"     : عدد الحزم المُستقبَلة فعلاً
@@ -102,7 +94,6 @@ def log_rsu_trace(rsu_id: str, payload_bytes: int):
 _net_stats:  dict = {}
 _stats_lock: threading.Lock = threading.Lock()
 
-# ─────────────────────────────────────────────────────────────────────────────
 # Buffers في الذاكرة — آمنة للـ Multi-threading
 #
 # _camera_buffers: {rsu_id: {cam_id: latest_payload_dict}}
@@ -111,15 +102,12 @@ _stats_lock: threading.Lock = threading.Lock()
 #
 # كل Listener thread يكتب فقط في buffer الـ RSU الخاص به.
 # حلقة التجميع تقرأ جميع الـ buffers. Lock يمنع تعارض القراءة/الكتابة.
-# ─────────────────────────────────────────────────────────────────────────────
 _camera_buffers: dict = {rsu_id: {} for rsu_id in RSU_CLUSTERS}
 _buffer_locks:   dict = {rsu_id: threading.Lock() for rsu_id in RSU_CLUSTERS}
 _last_received:  dict = {}
 
 
-# ─────────────────────────────────────────────────────────────────────────────
 # UDP Listener Thread
-# ─────────────────────────────────────────────────────────────────────────────
 def rsu_udp_listener(rsu_id: str, port: int, stop_event: threading.Event):
     """
     يستمع للحزم الواردة ويقيس المقاييس الشبكية الحقيقية:
@@ -207,9 +195,9 @@ def get_live_network_stats() -> dict:
     يُعيد إحصاءات الشبكة الحقيقية في أي لحظة يُطلب فيها.
 
     كل قيمة محسوبة من بيانات فعلية مقاسة:
-      PDR     = (حزم وصلت) / (حزم وصلت + حزم ضائعة) × 100
+      PDR     = (حزم وصلت) / (حزم وصلت + حزم ضائعة) * 100
       Latency = مجموع التأخيرات / عدد القياسات
-      Tput    = بايتات وصلت × 8 / الفترة الزمنية
+      Tput    = بايتات وصلت * 8 / الفترة الزمنية
     """
     with _stats_lock:
         snapshot = {k: dict(v) for k, v in _net_stats.items()}
@@ -243,14 +231,12 @@ def get_live_network_stats() -> dict:
         }
     return result
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Edge-Based Aggregation من الذاكرة
-# ─────────────────────────────────────────────────────────────────────────────
+# Fog-Cluster Based Aggregation من الذاكرة
 def aggregate_rsu(rsu_id: str) -> dict | None:
     """
     يقرأ أحدث بيانات الكاميرات من الـ RAM ويُجمِّعها.
 
-    خوارزمية Edge-Based Aggregation:
+    خوارزمية Fog-cluster Based Aggregation:
       vehicle_count  = مجموع (كل كاميرا تُغطي تقاطعاً مختلفاً)
       avg_speed_kmh  = متوسط (نمط يصف المنطقة ككل)
       traffic_density = متوسط (نمط يصف المنطقة ككل)
@@ -294,9 +280,7 @@ def aggregate_rsu(rsu_id: str) -> dict | None:
     }
 
 
-# ─────────────────────────────────────────────────────────────────────────────
 # نسخ احتياطية اختيارية — daemon threads
-# ─────────────────────────────────────────────────────────────────────────────
 def save_rsu_json(rsu_id: str, payload: dict) -> None:
     """حفظ اختياري غير متزامن — لا يُعيق حلقة التجميع."""
     if not SAVE_RSU_BACKUP:
@@ -316,9 +300,7 @@ def save_rsu_json(rsu_id: str, payload: dict) -> None:
     threading.Thread(target=_write, daemon=True).start()
 
 
-# ─────────────────────────────────────────────────────────────────────────────
 # MQTT Client
-# ─────────────────────────────────────────────────────────────────────────────
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
         log.info(f"[MQTT] Connected to {MQTT_BROKER}:{MQTT_PORT} ✓")
@@ -340,9 +322,7 @@ def create_mqtt_client() -> mqtt.Client:
     return client
 
 
-# ─────────────────────────────────────────────────────────────────────────────
 # Main
-# ─────────────────────────────────────────────────────────────────────────────
 def run():
     log.info("=" * 65)
     log.info("RSU Aggregation v2 — Memory-Based Network Streaming")
@@ -377,7 +357,7 @@ def run():
             cycle += 1
             log.info(f"\n── Cycle #{cycle} " + "─" * 40)
 
-            # ── طباعة إحصاءات الشبكة الحقيقية ──────────────────
+            #  طباعة إحصاءات الشبكة الحقيقية 
             net = get_live_network_stats()
             if net:
                 log.info("  [Network Stats — REAL MEASUREMENTS]")
@@ -392,7 +372,7 @@ def run():
                         f"Tput={s['throughput_kbps']}kbps"
                     )
 
-            # ── تجميع وإرسال بيانات المرور ───────────────────────
+            #  تجميع وإرسال بيانات المرور 
             for rsu_id in RSU_CLUSTERS:
                 payload = aggregate_rsu(rsu_id)
                 if payload is None:

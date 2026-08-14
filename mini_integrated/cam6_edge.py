@@ -1,6 +1,5 @@
 """
 cam6_edge.py — طبقة الحافة (Edge Layer)
-=========================================
 الأدوات: CARLA 0.9.13 + OpenCV 4.6.0 + YOLOv8n + SORT
 الوظيفة: CAM_06 تلتقط الإطارات → YOLOv8+SORT → UDP:7001
 البروتوكول: WiFi 802.11n (مُحاكى في NS-3 عبر منفذ 7001)
@@ -14,7 +13,7 @@ from datetime import datetime, timezone
 from traffic_analyzer import TrafficAnalyzer
 from camera_config   import CAMERAS
 
-# ── إعدادات ────────────────────────────────────────────────────────
+#  إعدادات 
 CARLA_HOST  = 'localhost'
 CARLA_PORT  = 2000
 CARLA_FPS   = 20.0
@@ -27,7 +26,7 @@ NS3_HOST    = "127.0.0.1"
 # إحداثيات CAM_06
 _cfg = next((c for c in CAMERAS if c['id'] == CAM_ID), None)
 
-# سوكت UDP مشترك
+# socket UDP مشترك
 _sock    = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 _seq_num = 0
 

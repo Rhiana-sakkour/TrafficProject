@@ -1,6 +1,4 @@
 """
-run_phase1.py — Memory-Based Network Streaming Edition
-======================================================
 Architecture:
     Camera → UDP Socket → RSU Listener (simulates WiFi 802.11n)
 
@@ -31,7 +29,7 @@ from camera_config import CAMERAS, RSU_CLUSTERS, RSU_UDP_PORTS
 # عداد تسلسلي لكل كاميرا — يُمكِّن كشف فقدان الحزم في RSU
 _seq_counters: dict = {}   # cam_id → int
 
-# ── Trace Logger ──────────────────────────────────────────────────
+#  Trace Logger 
 # يُسجِّل كل حزمة UDP حقيقية لتغذية NS-3 لاحقاً
 TRACE_FILE     = r"C:\TrafficProject\data\ns3_results\real_traffic_trace.csv"
 _trace_lock    = threading.Lock()
@@ -58,9 +56,7 @@ def log_trace(cam_id: str, rsu_id: str, payload_bytes: int, seq: int):
                         f"{payload_bytes},{seq}\n")
     threading.Thread(target=_write, daemon=True).start()
 
-# ─────────────────────────────────────────────────────────────────────────────
 # إعداد
-# ─────────────────────────────────────────────────────────────────────────────
 CARLA_HOST  = 'localhost'
 CARLA_PORT  = 2000
 CARLA_FPS   = 20.0
@@ -77,10 +73,8 @@ for _rsu_id, _cams in RSU_CLUSTERS.items():
     for _cam in _cams:
         CAM_TO_RSU[_cam] = _rsu_id
 
-# ─────────────────────────────────────────────────────────────────────────────
 # UDP Socket مشترك لجميع الكاميرات
 # socket واحد يكفي: UDP لا يحتاج connection منفصل لكل RSU
-# ─────────────────────────────────────────────────────────────────────────────
 _udp_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 _udp_sock.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, 65536)
 
@@ -161,9 +155,7 @@ def save_json_async(cam_id: str, metrics: dict) -> None:
     threading.Thread(target=_write, daemon=True).start()
 
 
-# ─────────────────────────────────────────────────────────────────────────────
 # CARLA
-# ─────────────────────────────────────────────────────────────────────────────
 def find_junctions(world):
     wps = world.get_map().generate_waypoints(distance=2.0)
     junctions = set()

@@ -85,7 +85,7 @@ class TrafficAnalyzer:
         if w != RESIZE_WIDTH:
             frame = cv2.resize(frame, (RESIZE_WIDTH, int(h*RESIZE_WIDTH/w)))
 
-        # ── كشف الأجسام ──────────────────────────────────────────
+        # كشف الأجسام 
         results = self.model(frame, verbose=False)[0]
         dets, det_classes = [], {}
         for box in results.boxes:
@@ -110,7 +110,7 @@ class TrafficAnalyzer:
 
         speeds_list = []
 
-        # ── معالجة كل مسار ───────────────────────────────────────
+        #  معالجة كل مسار 
         for track in tracks:
             x1, y1, x2, y2, raw_id = map(int, track[:5])
             tid = raw_id
@@ -154,7 +154,7 @@ class TrafficAnalyzer:
             self.last_bbox[tid] = [x1, y1, x2, y2]
             self.total_ids.add(tid)
 
-            # ── حساب السرعة ──────────────────────────────────────
+            #  حساب السرعة 
             spd  = self.speed_hist.get(tid, 0.0)
             hist = self.track_hist[tid]
             if len(hist) == SPEED_WINDOW_SIZE:
@@ -170,7 +170,7 @@ class TrafficAnalyzer:
                 self.speed_hist[tid] = spd
             speeds_list.append(spd)
 
-            # ── عدّ المركبات ──────────────────────────────────────
+            #  عدّ المركبات 
             if len(hist) >= MIN_TRACK_LEN:
                 _, py, _ = hist[-2]
                 _, cy2, _ = hist[-1]
@@ -183,7 +183,7 @@ class TrafficAnalyzer:
                     self.up_count += 1
                     self.counted_up.add(tid)
 
-            # ── رسم الصندوق والمعلومات ────────────────────────────
+            # رسم الصندوق والمعلومات 
             cv2.rectangle(frame, (x1,y1), (x2,y2), color, 2)
             label = f"#{tid} {CLASS_NAMES.get(vehicle_cls,'Veh')} {round(spd)}km/h"
             (lw, lh), _ = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.5, 1)
@@ -196,14 +196,14 @@ class TrafficAnalyzer:
             if tid not in self.lost_tracks and tid in self.last_bbox:
                 self.lost_tracks[tid] = (self.last_bbox[tid], fid)
 
-        # ── رسم خط العد ──────────────────────────────────────────
+        # رسم خط العد 
         cv2.line(frame, (0, COUNT_LINE_Y), (RESIZE_WIDTH, COUNT_LINE_Y),
                  (0, 0, 255), 2)
         cv2.putText(frame, "COUNTING LINE",
                     (RESIZE_WIDTH//2 - 60, COUNT_LINE_Y - 6),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,255), 1)
 
-        # ── لوحة الإحصاء (أعلى يسار) ────────────────────────────
+        #  لوحة الإحصاء (أعلى يسار) 
         panel_lines = [
             f" Camera: {self.cam_id}",
             f" Total crossed: {self.dn_count+self.up_count}",
@@ -222,7 +222,7 @@ class TrafficAnalyzer:
                         cv2.FONT_HERSHEY_SIMPLEX, 0.48,
                         (0,255,255), 1)
 
-        # ── حساب المؤشرات النهائية ───────────────────────────────
+        #  حساب المؤشرات النهائية 
         density  = calc_density(len(dets), PIXELS_PER_METER, frame.shape[0])
         avg_spd  = float(np.mean(speeds_list)) if speeds_list else 0.0
 
