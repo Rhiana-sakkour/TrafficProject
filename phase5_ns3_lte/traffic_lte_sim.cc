@@ -50,13 +50,13 @@ int main(int argc, char* argv[])
     NS_LOG_UNCOND("=== LTE Simulation | nRSU=" << nRSU
         << " simTime=" << simTime << "s ===");
 
-    /*  LTE + EPC  */
+    /* ── LTE + EPC ──────────────────────────────────────────────── */
     Ptr<LteHelper> lteHelper = CreateObject<LteHelper>();
     Ptr<PointToPointEpcHelper> epcHelper =
         CreateObject<PointToPointEpcHelper>();
     lteHelper->SetEpcHelper(epcHelper);
 
-    /*  Remote Host (يُمثّل السيرفر المركزي)  */
+    /* ── Remote Host (يُمثّل السيرفر المركزي) ────────────────────── */
     NodeContainer remoteHostContainer;
     remoteHostContainer.Create(1);
     Ptr<Node> remoteHost = remoteHostContainer.Get(0);
@@ -92,12 +92,12 @@ int main(int argc, char* argv[])
     remoteStaticRoute->AddNetworkRouteTo(
         Ipv4Address("7.0.0.0"), Ipv4Mask("255.0.0.0"), 1);
 
-    /*  eNodeB وعقد RSU  */
+    /* ── eNodeB وعقد RSU ────────────────────────────────────────── */
     NodeContainer enbNode, ueNodes;
     enbNode.Create(1);
     ueNodes.Create(nRSU);
 
-    /*  مواضع ثابتة  */
+    /* ── مواضع ثابتة ────────────────────────────────────────────── */
     MobilityHelper mobility;
     mobility.SetMobilityModel("ns3::ConstantPositionMobilityModel");
 
@@ -121,7 +121,7 @@ int main(int argc, char* argv[])
     mobility.SetPositionAllocator(ueAlloc);
     mobility.Install(ueNodes);
 
-    /*  تثبيت أجهزة LTE  */
+    /* ── تثبيت أجهزة LTE ────────────────────────────────────────── */
     NetDeviceContainer enbDevs = lteHelper->InstallEnbDevice(enbNode);
     NetDeviceContainer ueLteDevs = lteHelper->InstallUeDevice(ueNodes);
 
@@ -141,7 +141,7 @@ int main(int argc, char* argv[])
     // ربط جميع UEs بالـ eNodeB
     lteHelper->Attach(ueLteDevs, enbDevs.Get(0));
 
-    /*  التطبيقات  */
+    /* ── التطبيقات ──────────────────────────────────────────────── */
     uint16_t port = 8080;
     Address serverAddr(InetSocketAddress(remoteHostAddr, port));
 
@@ -172,14 +172,14 @@ int main(int argc, char* argv[])
         app.Stop(Seconds(simTime));
     }
 
-    /*  Flow Monitor  */
+    /* ── Flow Monitor ────────────────────────────────────────────── */
     FlowMonitorHelper fmHelper;
     Ptr<FlowMonitor> fm = fmHelper.InstallAll();
 
     Simulator::Stop(Seconds(simTime));
     Simulator::Run();
 
-    /*  جمع النتائج  */
+    /* ── جمع النتائج ─────────────────────────────────────────────── */
     fm->CheckForLostPackets();
     Ptr<Ipv4FlowClassifier> classifier =
         DynamicCast<Ipv4FlowClassifier>(fmHelper.GetClassifier());

@@ -31,7 +31,7 @@ using namespace ns3;
 
 NS_LOG_COMPONENT_DEFINE("TrafficWifiSim");
 
-/*  نتائج كل cluster  */
+/* ── نتائج كل cluster ──────────────────────────────────────────── */
 struct ClusterResult {
     uint32_t tx;
     uint32_t rx;
@@ -40,7 +40,7 @@ struct ClusterResult {
     double   duration_s;
 };
 
-/*  تشغيل محاكاة cluster واحد  */
+/* ── تشغيل محاكاة cluster واحد ─────────────────────────────────── */
 ClusterResult RunCluster(
     uint32_t              nCameras,
     uint32_t              freqMHz,
@@ -53,7 +53,7 @@ ClusterResult RunCluster(
     apNode.Create(1);
     staNodes.Create(nCameras);
 
-    /*  WiFi 802.11n  */
+    /* ── WiFi 802.11n ──────────────────────────────────────────── */
     WifiHelper wifi;
     wifi.SetStandard(WIFI_STANDARD_80211n_2_4GHZ);
 
@@ -92,7 +92,7 @@ ClusterResult RunCluster(
                 "ActiveProbing",  BooleanValue(false));
     NetDeviceContainer staDev = wifi.Install(phy, mac, staNodes);
 
-    /*  مواضع ثابتة (بنية تحتية)  */
+    /* ── مواضع ثابتة (بنية تحتية) ──────────────────────────────── */
     MobilityHelper mobility;
     mobility.SetMobilityModel("ns3::ConstantPositionMobilityModel");
 
@@ -107,7 +107,7 @@ ClusterResult RunCluster(
     allNodes.Add(staNodes);
     mobility.Install(allNodes);
 
-    /*  طبقة الإنترنت  */
+    /* ── طبقة الإنترنت ─────────────────────────────────────────── */
     InternetStackHelper internet;
     internet.Install(allNodes);
 
@@ -116,7 +116,7 @@ ClusterResult RunCluster(
     Ipv4InterfaceContainer apIf  = addr.Assign(apDev);
     addr.Assign(staDev);
 
-    /*  التطبيقات  */
+    /* ── التطبيقات ──────────────────────────────────────────────── */
     uint16_t port = 9;
 
     // PacketSink على الـ RSU (AP) يستقبل من جميع الكاميرات
@@ -149,14 +149,14 @@ ClusterResult RunCluster(
         app.Stop(Seconds(simTime_s));
     }
 
-    /*  Flow Monitor  */
+    /* ── Flow Monitor ────────────────────────────────────────────── */
     FlowMonitorHelper fmHelper;
     Ptr<FlowMonitor> fm = fmHelper.InstallAll();
 
     Simulator::Stop(Seconds(simTime_s));
     Simulator::Run();
 
-    /*  جمع النتائج  */
+    /* ── جمع النتائج ─────────────────────────────────────────────── */
     fm->CheckForLostPackets();
 
     ClusterResult result = {0, 0, 0.0, 0.0, 0.0};
@@ -179,7 +179,7 @@ ClusterResult RunCluster(
     return result;
 }
 
-/*  main  */
+/* ── main ────────────────────────────────────────────────────────── */
 int main(int argc, char* argv[])
 {
     uint32_t simTime    = 300;  // ثانية
@@ -192,7 +192,7 @@ int main(int argc, char* argv[])
 
     Time::SetResolution(Time::NS);
 
-    /*  تعريف الـ Clusters  */
+    /* ── تعريف الـ Clusters ─────────────────────────────────────── */
     struct ClusterCfg {
         std::string          rsuName;
         uint32_t             nCameras;
@@ -215,7 +215,7 @@ int main(int argc, char* argv[])
          {Vector(-70, -55, 8), Vector(-70, 35, 8)}}
     };
 
-    /*  ملف CSV للنتائج  */
+    /* ── ملف CSV للنتائج ─────────────────────────────────────────── */
     std::ofstream csv("wifi_results.csv");
     csv << "rsu_id,n_cameras,channel_mhz,"
            "packets_tx,packets_rx,pdr_pct,"
